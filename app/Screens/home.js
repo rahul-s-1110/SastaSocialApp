@@ -72,7 +72,11 @@ const HomePage = () => {
   };
 
   const renderPost = ({item}) => {
-    console.log('itemn sis  ', item);
+   let allval =  item?.tag.map(obj => obj.name);
+   const pattern = new RegExp(`\\b(${allval.join('|')})\\b`, 'gi');
+    const parts = item?.desc.split(pattern);
+    const joinString = parts.map((word,index)=> <Text style={pattern.test(word) && {color:colors.orange}} key={index}>{word}</Text>)
+
     return (
       <View
         style={{
@@ -81,23 +85,10 @@ const HomePage = () => {
           backgroundColor: colors.white,
         }}>
         <View style={{flexDirection: 'row', marginTop: 15, flex: 1}}>
-          {/* {item?.img.map((item, index) => (
-            <Pressable
-              onPress={() => {
-                setImgUri(item?.uri);
-                setShowModal(true);
-              }}>
-              <Image
-                resizeMode="contain"
-                style={{width: 90, height: 90, marginLeft: 15}}
-                source={{uri: item?.uri}}
-              />
-            </Pressable>
-          ))} */}
-
           <FlatList
             data={item?.img}
             horizontal
+            showsHorizontalScrollIndicator={false}
             renderItem={({item}) => (
               <Pressable
                 onPress={() => {
@@ -115,9 +106,8 @@ const HomePage = () => {
             ListFooterComponent={<View style={{paddingRight: 15}} />}
           />
         </View>
-        <Text style={{padding: 10}} numberOfLines={3}>
-          {item?.desc}
-        </Text>
+        <View style={{flexDirection:"row",flexWrap:"wrap"}}>{joinString}</View>
+        {/* {parts.map((str,index)=> <Text key={index}>{str}</Text>)} */}
         <View
           style={{flexDirection: 'row', alignItems: 'center', marginLeft: 10}}>
           <Pressable onPress={() => dispatch(likePost(item?.postId))}>

@@ -43,8 +43,19 @@ const HomePage = () => {
 
   const RenderItem = ({item}) => {
     const checkFollow = listUser?.some(user => user?.id == item?.id);
+    const colId = item?.id % 2 == 0;
     return (
-      <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+      <View
+        style={[
+          {
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            paddingLeft: 5,
+            borderRadius: 5,
+            backgroundColor: colId ? '#d6d2d2' : '#ebe8e8',
+          },
+        ]}>
         <Text>{item?.name}</Text>
         <Pressable
           onPress={() => toogleUsers(item)}
@@ -61,6 +72,7 @@ const HomePage = () => {
   };
 
   const renderPost = ({item}) => {
+    console.log('itemn sis  ', item);
     return (
       <View
         style={{
@@ -69,7 +81,7 @@ const HomePage = () => {
           backgroundColor: colors.white,
         }}>
         <View style={{flexDirection: 'row', marginTop: 15, flex: 1}}>
-          {item?.img.map((item, index) => (
+          {/* {item?.img.map((item, index) => (
             <Pressable
               onPress={() => {
                 setImgUri(item?.uri);
@@ -81,7 +93,27 @@ const HomePage = () => {
                 source={{uri: item?.uri}}
               />
             </Pressable>
-          ))}
+          ))} */}
+
+          <FlatList
+            data={item?.img}
+            horizontal
+            renderItem={({item}) => (
+              <Pressable
+                onPress={() => {
+                  setImgUri(item?.path);
+                  setShowModal(true);
+                }}>
+                <Image
+                  resizeMode="contain"
+                  style={{width: 90, height: 90, marginLeft: 15}}
+                  source={{uri: item?.path}}
+                />
+              </Pressable>
+            )}
+            ItemSeparatorComponent={<View style={{width: 15}} />}
+            ListFooterComponent={<View style={{paddingRight: 15}} />}
+          />
         </View>
         <Text style={{padding: 10}} numberOfLines={3}>
           {item?.desc}
@@ -109,6 +141,7 @@ const HomePage = () => {
         animationType={'slide'}
         transparent={true}
         visible={showModal}
+        style={{flex:1,backgroundColor:"rgba(247, 250, 248,0.4)"}}
         onRequestClose={() => setShowModal(!showModal)}>
         <TouchableWithoutFeedback
           onPress={() => setShowModal(false)}
@@ -140,9 +173,12 @@ const HomePage = () => {
           style={{paddingTop: 10}}
           data={users}
           renderItem={RenderItem}
+          scrollsToTop={true}
+          bounces={true}
           showsVerticalScrollIndicator={false}
           keyExtractor={item => item?.id}
           ItemSeparatorComponent={<View style={{height: 10}} />}
+          ListFooterComponent={<View style={{paddingBottom: 15}} />}
         />
       ) : (
         <View style={{flex: 1, paddingTop: 15, paddingVertical: 25}}>
@@ -156,7 +192,7 @@ const HomePage = () => {
           <TouchableOpacity
             onPress={() => navigation.navigate('addNewPost')}
             style={styles.addBtn}>
-            <Text>+</Text>
+            <Text style={{fontSize: 30, color: colors.white}}>+</Text>
           </TouchableOpacity>
         </View>
       )}
@@ -165,17 +201,19 @@ const HomePage = () => {
 };
 const styles = StyleSheet.create({
   followBtn: {
-    paddingHorizontal: 25,
-    paddingVertical: 5,
     borderRadius: 5,
+    width: 100,
+    height: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   addBtn: {
     alignSelf: 'center',
-    width: 40,
-    height: 40,
+    width: 60,
+    height: 60,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 20,
+    borderRadius: 30,
     backgroundColor: colors.blue,
   },
 });

@@ -25,7 +25,6 @@ const AddNewPost = () => {
   const [taggedUsers, setTaggedusers] = useState([]);
   const [untagUser, setUnTagUser] = useState([]);
   const [imgPath, setImgPath] = useState([]);
-  console.log('imgPath', imgPath);
 
   const ListUser = useSelector(state => state.follow.following);
   const navigation = useNavigation();
@@ -92,15 +91,13 @@ const AddNewPost = () => {
 
 
    const removeImg =  (index) =>{
-    console.log("remove",index)
     let newImg = imgPath;
     newImg.splice(index,1);
     setImgPath(newImg);
    }
 
   const handleBackspace = key => {
-    console.log('key is ', key); 
-
+    // Backspace handling
   };
 
   const addImg = () => {
@@ -135,13 +132,12 @@ const AddNewPost = () => {
         style={{height: 100, borderWidth: 1}}
         multiline
         onChangeText={handleTextChange}
-        onKeyPress={handleBackspace}
+        // onKeyPress={handleBackspace}
       />
       <Text onPress={addImg} style={styles.addFileBtn}>
         Add Files
       </Text>
       <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-        {/* {imgPath.length > 0 && imgPath.map((item)=> <Image   /> )} */}
         <FlatList
           horizontal
           style={{paddingTop: 5}}

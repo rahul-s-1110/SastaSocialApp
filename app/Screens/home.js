@@ -23,7 +23,7 @@ import {likePost} from '../redux/postReducer';
 const HomePage = () => {
   const people = 1;
   const post = 2;
-  const [selectPart, setSelectPart] = useState(post);
+  const [selectPart, setSelectPart] = useState(people);
   const [followerData, setFollowerData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [imgUri, setImgUri] = useState('');
